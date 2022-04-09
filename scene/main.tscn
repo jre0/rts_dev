@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://oglbhiux34in"]
+
+[ext_resource type="PackedScene" uid="uid://bgitn5sos3urt" path="res://scene/xyz.tscn" id="1_h8sxh"]
+[ext_resource type="Script" path="res://script/terrain.gd" id="1_wipmd"]
+[ext_resource type="PackedScene" uid="uid://tx02kkjwv1cw" path="res://scene/viewport.tscn" id="2_hvnqv"]
+
+[node name="main" type="Node3D"]
+
+[node name="xyz" parent="." instance=ExtResource( "1_h8sxh" )]
+
+[node name="terrain" type="MeshInstance3D" parent="."]
+script = ExtResource( "1_wipmd" )
+
+[node name="viewport" parent="." instance=ExtResource( "2_hvnqv" )]
+start_position = Vector3(10, 0, 10)
+start_zoom = 20
