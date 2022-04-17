@@ -7,8 +7,8 @@ extends SubViewportContainer
 @onready var pivot_x = $subViewport/pivot_y/pivot_x
 @onready var camera =  $subViewport/pivot_y/pivot_x/camera
 var mouseStartPosition = Vector2(0,0)
-var pivotStartX
-var pivotStartZ 
+var pivot_start_x
+var pivot_start_y 
 var orbitSpeed = 0.005
 var zoomSpeed = 0.05
 var orbit = false
@@ -22,8 +22,8 @@ func _unhandled_input(event):
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			if event.pressed==true:
 				mouseStartPosition = event.position
-				pivotStartX = pivot_x.get_transform()
-				pivotStartZ = pivot_y.get_transform()
+				pivot_start_x = pivot_x.get_transform()
+				pivot_start_y = pivot_y.get_transform()
 				orbit = true
 			elif event.pressed==false:
 				orbit = false
@@ -34,8 +34,8 @@ func _unhandled_input(event):
 	elif event is InputEventMouseMotion:
 		if orbit==true:
 			var delta =  mouseStartPosition - event.position
-			pivot_x.set_transform(pivotStartX)
+			pivot_x.set_transform(pivot_start_x)
 			pivot_x.rotate_x(orbitSpeed * delta.y)
-			pivot_y.set_transform(pivotStartZ)
+			pivot_y.set_transform(pivot_start_y)
 			pivot_y.rotate_y(orbitSpeed * delta.x)
 

@@ -1,16 +1,31 @@
-[gd_scene load_steps=4 format=3 uid="uid://oglbhiux34in"]
+[gd_scene load_steps=6 format=3 uid="uid://dvwtqlw2m14mt"]
 
+[ext_resource type="Script" path="res://script/main.gd" id="1_4dmui"]
 [ext_resource type="PackedScene" uid="uid://bgitn5sos3urt" path="res://scene/xyz.tscn" id="1_h8sxh"]
 [ext_resource type="Script" path="res://script/terrain.gd" id="1_wipmd"]
+[ext_resource type="Material" uid="uid://diu65pi3kra0m" path="res://material/default.tres" id="2_cmqqw"]
 [ext_resource type="PackedScene" uid="uid://tx02kkjwv1cw" path="res://scene/viewport.tscn" id="2_hvnqv"]
 
 [node name="main" type="Node3D"]
+script = ExtResource( "1_4dmui" )
 
 [node name="xyz" parent="." instance=ExtResource( "1_h8sxh" )]
 
 [node name="terrain" type="MeshInstance3D" parent="."]
+material_override = ExtResource( "2_cmqqw" )
 script = ExtResource( "1_wipmd" )
+point_count_x = 300
+point_count_z = 300
+rift_count_min = 4
+rift_count_max = 8
+rift_radius_min = 50
+rift_radius_max = 150
+arc_fade_min = 2
+arc_fade_max = 8
+
+[node name="light" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707106, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 0, 0)
 
 [node name="viewport" parent="." instance=ExtResource( "2_hvnqv" )]
-start_position = Vector3(10, 0, 10)
-start_zoom = 20
+start_position = Vector3(150, 0, 150)
+start_zoom = 150
