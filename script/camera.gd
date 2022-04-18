@@ -1,7 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://0imi8sp255t6"]
-
-[sub_resource type="GDScript" id="GDScript_wtdx4"]
-script/source = "extends Node3D
+extends Node3D
 
 @onready var pivot_y = self
 @onready var pivot_x = $pivot_x
@@ -49,35 +46,3 @@ func _unhandled_input(event):
 			pivot_x.rotate_x(orbitSpeed * delta.y)
 			pivot_y.set_transform(pivot_start_y)
 			pivot_y.rotate_y(orbitSpeed * delta.x)
-"
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_e2i6w"]
-
-[sub_resource type="Sky" id="Sky_x64cu"]
-sky_material = SubResource( "ProceduralSkyMaterial_e2i6w" )
-
-[sub_resource type="Environment" id="Environment_ixqlb"]
-background_mode = 2
-sky = SubResource( "Sky_x64cu" )
-ambient_light_source = 3
-ambient_light_color = Color(0.501961, 0.501961, 0.501961, 1)
-
-[node name="viewport" type="SubViewportContainer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-stretch = true
-script = SubResource( "GDScript_wtdx4" )
-
-[node name="subViewport" type="SubViewport" parent="."]
-handle_input_locally = false
-size = Vector2i(1024, 600)
-render_target_update_mode = 4
-
-[node name="pivot_y" type="Node3D" parent="subViewport"]
-
-[node name="pivot_x" type="Node3D" parent="subViewport/pivot_y"]
-transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0)
-
-[node name="camera" type="Camera3D" parent="subViewport/pivot_y/pivot_x"]
-environment = SubResource( "Environment_ixqlb" )
-current = true

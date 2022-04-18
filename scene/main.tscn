@@ -1,31 +1,74 @@
-[gd_scene load_steps=6 format=3 uid="uid://dvwtqlw2m14mt"]
+[gd_scene load_steps=13 format=3 uid="uid://dxx18pv8lwg12"]
 
 [ext_resource type="Script" path="res://script/main.gd" id="1_4dmui"]
-[ext_resource type="PackedScene" uid="uid://bgitn5sos3urt" path="res://scene/xyz.tscn" id="1_h8sxh"]
-[ext_resource type="Script" path="res://script/terrain.gd" id="1_wipmd"]
-[ext_resource type="Material" uid="uid://diu65pi3kra0m" path="res://material/default.tres" id="2_cmqqw"]
-[ext_resource type="PackedScene" uid="uid://tx02kkjwv1cw" path="res://scene/viewport.tscn" id="2_hvnqv"]
+[ext_resource type="Script" path="res://script/map.gd" id="1_wipmd"]
+[ext_resource type="Material" uid="uid://blvlgw12obvcl" path="res://material/terrain.tres" id="3_six54"]
+[ext_resource type="Script" path="res://script/unit.gd" id="4_sld2x"]
+[ext_resource type="Script" path="res://script/camera.gd" id="5_wli8m"]
+
+[sub_resource type="HeightMapShape3D" id="HeightMapShape3D_53aoc"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_f6y66"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_yn583"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_6t2ir"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_e2i6w"]
+
+[sub_resource type="Sky" id="Sky_x64cu"]
+sky_material = SubResource( "ProceduralSkyMaterial_e2i6w" )
+
+[sub_resource type="Environment" id="Environment_ixqlb"]
+background_mode = 2
+sky = SubResource( "Sky_x64cu" )
+ambient_light_source = 3
+ambient_light_color = Color(0.501961, 0.501961, 0.501961, 1)
 
 [node name="main" type="Node3D"]
 script = ExtResource( "1_4dmui" )
 
-[node name="xyz" parent="." instance=ExtResource( "1_h8sxh" )]
-
-[node name="terrain" type="MeshInstance3D" parent="."]
-material_override = ExtResource( "2_cmqqw" )
+[node name="map" type="StaticBody3D" parent="."]
 script = ExtResource( "1_wipmd" )
-point_count_x = 300
-point_count_z = 300
-rift_count_min = 4
-rift_count_max = 8
-rift_radius_min = 50
-rift_radius_max = 150
-arc_fade_min = 2
-arc_fade_max = 8
 
-[node name="light" type="DirectionalLight3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="map"]
+shape = SubResource( "HeightMapShape3D_53aoc" )
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="map"]
+material_override = ExtResource( "3_six54" )
+skeleton = NodePath("../..")
+
+[node name="light" type="DirectionalLight3D" parent="map"]
 transform = Transform3D(0.707106, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 0, 0)
 
-[node name="viewport" parent="." instance=ExtResource( "2_hvnqv" )]
-start_position = Vector3(150, 0, 150)
-start_zoom = 150
+[node name="test_ball" type="RigidDynamicBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5694, 40, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="test_ball"]
+shape = SubResource( "SphereShape3D_f6y66" )
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="test_ball"]
+mesh = SubResource( "SphereMesh_yn583" )
+skeleton = NodePath("../..")
+
+[node name="unit" type="RigidDynamicBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+script = ExtResource( "4_sld2x" )
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="unit"]
+shape = SubResource( "SphereShape3D_f6y66" )
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="unit"]
+mesh = SubResource( "BoxMesh_6t2ir" )
+skeleton = NodePath("../..")
+
+[node name="camera" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 150, 50)
+script = ExtResource( "5_wli8m" )
+
+[node name="pivot_x" type="Node3D" parent="camera"]
+transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0)
+
+[node name="camera" type="Camera3D" parent="camera/pivot_x"]
+environment = SubResource( "Environment_ixqlb" )
+current = true
