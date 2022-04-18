@@ -1,0 +1,49 @@
+[gd_scene load_steps=10 format=3 uid="uid://cx1i0ep7g63nm"]
+
+[ext_resource type="Script" path="res://script/game.gd" id="1_3ohel"]
+[ext_resource type="Script" path="res://script/map.gd" id="1_negag"]
+[ext_resource type="Material" uid="uid://blvlgw12obvcl" path="res://material/terrain.tres" id="2_gh43v"]
+[ext_resource type="PackedScene" uid="uid://maooksqxfbt1" path="res://scene/unit.tscn" id="4_26705"]
+[ext_resource type="Script" path="res://script/camera.gd" id="4_jnxvn"]
+
+[sub_resource type="HeightMapShape3D" id="HeightMapShape3D_hyevi"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uf3bl"]
+
+[sub_resource type="Sky" id="Sky_x64cu"]
+sky_material = SubResource( "ProceduralSkyMaterial_uf3bl" )
+
+[sub_resource type="Environment" id="Environment_gx5pn"]
+background_mode = 2
+sky = SubResource( "Sky_x64cu" )
+ambient_light_source = 3
+ambient_light_color = Color(0.501961, 0.501961, 0.501961, 1)
+
+[node name="game" type="Node"]
+script = ExtResource( "1_3ohel" )
+
+[node name="map" type="StaticBody3D" parent="."]
+script = ExtResource( "1_negag" )
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="map"]
+shape = SubResource( "HeightMapShape3D_hyevi" )
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="map"]
+material_override = ExtResource( "2_gh43v" )
+skeleton = NodePath("../..")
+
+[node name="light" type="DirectionalLight3D" parent="map"]
+transform = Transform3D(0.707106, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 0, 0)
+
+[node name="unit" parent="." instance=ExtResource( "4_26705" )]
+
+[node name="camera" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 150, 50)
+script = ExtResource( "4_jnxvn" )
+
+[node name="pivot_x" type="Node3D" parent="camera"]
+transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0)
+
+[node name="camera" type="Camera3D" parent="camera/pivot_x"]
+environment = SubResource( "Environment_gx5pn" )
+current = true

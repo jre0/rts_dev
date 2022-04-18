@@ -31,13 +31,13 @@ func _unhandled_input(event):
 			ray_args.from = camera.project_ray_origin(event.position)
 			var ray_normal = camera.project_ray_normal(event.position) 
 			ray_args.to = ray_args.from + ray_normal*10000
-			var move = -ray_normal * pivot_y.position.distance_to(map_pointer_position) * zoomSpeed
+			var move = -ray_normal*pivot_y.position.distance_to(map_pointer_position)*zoomSpeed
 			pivot_y.global_translate(move)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			ray_args.from = camera.project_ray_origin(event.position)
 			var ray_normal = camera.project_ray_normal(event.position) 
 			ray_args.to = ray_args.from + ray_normal * 10000
-			var move = ray_normal* pivot_y.position.distance_to(map_pointer_position) * zoomSpeed
+			var move = ray_normal*pivot_y.position.distance_to(map_pointer_position)*zoomSpeed
 			pivot_y.global_translate(move)
 	elif event is InputEventMouseMotion:
 		if orbit==true:

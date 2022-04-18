@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://maooksqxfbt1"]
+
+[ext_resource type="Script" path="res://script/unit.gd" id="1_2b44k"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_asdax"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_p08s2"]
+
+[node name="unit" type="RigidDynamicBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+script = ExtResource( "1_2b44k" )
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource( "SphereShape3D_asdax" )
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource( "BoxMesh_p08s2" )
+skeleton = NodePath("../..")
+
+[node name="hp_bar" type="Line2D" parent="."]
+visible = false
+points = PackedVector2Array(64, 0, 0, 0)
+width = 2.0
+default_color = Color(0.105882, 1, 0.317647, 1)
