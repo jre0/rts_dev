@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cx1i0ep7g63nm"]
+[gd_scene load_steps=11 format=3 uid="uid://cx1i0ep7g63nm"]
 
 [ext_resource type="Script" path="res://script/game.gd" id="1_3ohel"]
 [ext_resource type="Script" path="res://script/map.gd" id="1_negag"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://script/camera.gd" id="4_jnxvn"]
 
 [sub_resource type="HeightMapShape3D" id="HeightMapShape3D_hyevi"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1tjx0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uf3bl"]
 
@@ -35,15 +37,18 @@ skeleton = NodePath("../..")
 [node name="light" type="DirectionalLight3D" parent="map"]
 transform = Transform3D(0.707106, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 0, 0)
 
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="map"]
+transform = Transform3D(10000, 0, 0, 0, 1, 0, 0, 0, 10000, 0, -1, 0)
+shape = SubResource( "BoxShape3D_1tjx0" )
+
 [node name="unit" parent="." instance=ExtResource( "4_26705" )]
 
 [node name="camera" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 150, 50)
 script = ExtResource( "4_jnxvn" )
 
 [node name="pivot_x" type="Node3D" parent="camera"]
 transform = Transform3D(1, 0, 0, 0, 0.34202, 0.939693, 0, -0.939693, 0.34202, 0, 0, 0)
 
 [node name="camera" type="Camera3D" parent="camera/pivot_x"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 150)
 environment = SubResource( "Environment_gx5pn" )
-current = true

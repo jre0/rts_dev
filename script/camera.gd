@@ -9,14 +9,18 @@ var pivot_start_y
 var orbitSpeed = 0.005
 var zoomSpeed = 0.07
 var orbit = false
-var map_pointer_position = Vector3(0,0,0)
-var ray_args = PhysicsRayQueryParameters3D.new()
+var map_mouse_position = Vector3(0,0,0)
+var map_center_position = Vector3(0,0,0)
+var mouse_ray_args = PhysicsRayQueryParameters3D.new()
+var center_ray_args = PhysicsRayQueryParameters3D.new()
 
 func _physics_process(_delta):
 	var space_state = camera.get_world_3d().direct_space_state
-	var ray = space_state.intersect_ray(ray_args)
-	if len(ray) > 0: map_pointer_position = ray.position
-
+	var mouse_ray = space_state.intersect_ray(mouse_ray_args)
+	if len(mouse_ray) > 0: map_mouse_position = mouse_ray.position
+	var center_ray = space_state.intersect_ray(center_ray_args)
+	if len(center_ray) > 0: map_center_position = center_ray.position
+	
 func _unhandled_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
@@ -28,17 +32,18 @@ func _unhandled_input(event):
 			elif event.pressed==false:
 				orbit = false
 		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			ray_args.from = camera.project_ray_origin(event.position)
-			var ray_normal = camera.project_ray_normal(event.position) 
-			ray_args.to = ray_args.from + ray_normal*10000
-			var move = -ray_normal*pivot_y.position.distance_to(map_pointer_position)*zoomSpeed
-			pivot_y.global_translate(move)
+			mouse_ray_args.from = camera.project_ray_origin(event.position)
+			var mouse_ray_normal = camera.project_ray_normal(event.position) 
+			mouse_ray_args.to = mouse_ray_args.from + mouse_ray_normal*10000
+			var move = mouse_ray_normal*camera.position.z*zoomSpeed
+			camera.global_translate(move)
+			center_ray_args.from = camera.project_ray_origin(DisplayServer.screen_get_size()/2)
+			center_ray_args.to = center_ray_args.from + camera.project_ray_normal(DisplayServer.screen_get_size()/2)*10000
+			var global_transform = camera.get_global_transform()
+			pivot_y.position = map_center_position
+			camera.set_global_transform(global_transform) 
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			ray_args.from = camera.project_ray_origin(event.position)
-			var ray_normal = camera.project_ray_normal(event.position) 
-			ray_args.to = ray_args.from + ray_normal * 10000
-			var move = ray_normal*pivot_y.position.distance_to(map_pointer_position)*zoomSpeed
-			pivot_y.global_translate(move)
+			camera.translate(Vector3.BACK * camera.position.z * zoomSpeed)
 	elif event is InputEventMouseMotion:
 		if orbit==true:
 			var delta = mouseStartPosition - event.position

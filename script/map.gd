@@ -20,12 +20,8 @@ var rng = RandomNumberGenerator.new()
 var half_pi = PI/2
 var tex_shift_constant = (1/half_pi) * 796
 var height_array = PackedFloat32Array()
-#var height_map_shape = HeightMapShape3D()
 @onready var collision_shape = $CollisionShape3D
 @onready var mesh_instance = $MeshInstance3D
-
-#func _input_event(camera, event, pos, normal, shape):
-#	print("hi")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -39,19 +35,13 @@ func make_rifts():
 	rift_count = rng.randi_range(rift_count_min, rift_count_max)
 	for r in range(rift_count):
 		var center = Vector2(rng.randi_range(0, point_count_x), rng.randi_range(0, point_count_z))
-		#var arc_midpoint = Vector2(rng.randi_range(rift_radius_min, rift_radius_max), rng.randi_range(rift_radius_min, rift_radius_max))
-		#arc_midpoint = center + arc_midpoint
-		#var direction = center.direction_to(arc_midpoint)
-		#var distance = center.distance_to(arc_midpoint)
 		var angle = rng.randf_range(-PI, PI)
 		var distance = rng.randf_range(rift_radius_min, rift_radius_max)
 		var arc_midpoint = center + Vector2(cos(angle),sin(angle))*distance
 		var direction = center.direction_to(arc_midpoint)
 		var arc_fade = rng.randf_range(arc_fade_min, arc_fade_max)
-		#var arc_center = rng.randf_range(0, 2*PI)
-		#var arc = rng.randf_range(rift_arc_min, rift_arc_max)
 		var height = rng.randf_range(rift_height_min, rift_height_max)
-		rifts.append([center,direction,distance,height,arc_fade])#,arc])
+		rifts.append([center,direction,distance,height,arc_fade])
 func make_points():
 	for z in range(point_count_z):
 		points.append([])
@@ -76,7 +66,6 @@ func make_points():
 	collision_shape.shape.set_map_width(point_count_x)
 	collision_shape.shape.set_map_depth(point_count_z)
 	collision_shape.shape.set_map_data(height_array)
-	#collision_shape.set_shape(collision_shape.shape)
 
 #mesh generation
 func make_mesh():
@@ -87,8 +76,6 @@ func make_mesh():
 		for x in range(point_count_x-1):
 			make_triangle(vertices,normals,uvs,[points[z][x],points[z][x+1],points[z+1][x]])
 			make_triangle(vertices,normals,uvs,[points[z+1][x+1],points[z+1][x],points[z][x+1]])
-			#make_triangle(vertices,normals,uvs,[points[x][z],points[x+1][z],points[x][z+1]])
-			#make_triangle(vertices,normals,uvs,[points[x+1][z+1],points[x][z+1],points[x+1][z]])
 	# Initialize the ArrayMesh.
 	var array_mesh = ArrayMesh.new()
 	var arrays = []
